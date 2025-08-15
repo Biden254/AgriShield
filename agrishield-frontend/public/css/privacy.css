@@ -1,0 +1,249 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f8fafc;
+    color: #222;
+    margin: 0;
+    padding: 0;
+}
+
+.main-header {
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.5rem 0;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    color: #2e7d32;
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.logo img {
+    height: 32px;
+    width: auto;
+}
+
+.desktop-nav .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    color: #222;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #2e7d32;
+}
+
+.language-toggle {
+    background: #e8f5e9;
+    border: none;
+    color: #2e7d32;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.privacy-hero {
+    background: #e8f5e9;
+    padding: 2rem 0 1rem 0;
+    text-align: center;
+}
+
+.privacy-hero h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    color: #2e7d32;
+}
+
+.privacy-hero p {
+    margin-top: 0.5rem;
+    color: #444;
+    font-size: 1.1rem;
+}
+
+.privacy-content {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(46, 125, 50, 0.07);
+    padding: 2rem;
+}
+
+.last-updated {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.privacy-section {
+    margin-bottom: 2.5rem;
+}
+
+.privacy-section h2 {
+    color: #2e7d32;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.privacy-section h3 {
+    color: #388e3c;
+    margin-top: 1.2rem;
+    margin-bottom: 0.3rem;
+    font-size: 1.1rem;
+}
+
+.privacy-section ul, .privacy-section ol {
+    margin-left: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.privacy-section p {
+    margin-bottom: 1rem;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.98rem;
+}
+
+.data-table th, .data-table td {
+    border: 1px solid #e0e0e0;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+}
+
+.data-table th {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.data-table tr:nth-child(even) {
+    background: #f6f6f6;
+}
+
+.highlight-box {
+    background: #f1f8e9;
+    border-left: 4px solid #2e7d32;
+    padding: 1rem 1.2rem;
+    margin: 1.5rem 0;
+    border-radius: 6px;
+}
+
+.highlight-box h4 {
+    margin-top: 0;
+    color: #2e7d32;
+}
+
+.contact-privacy {
+    background: #e8f5e9;
+    border-radius: 6px;
+    padding: 1.2rem;
+    margin: 2rem 0;
+}
+
+.contact-privacy h3 {
+    color: #2e7d32;
+    margin-top: 0;
+}
+
+.main-footer {
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    padding: 1.5rem 0 1rem 0;
+    margin-top: 3rem;
+}
+
+.footer-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: bold;
+    color: #2e7d32;
+    font-size: 1.1rem;
+}
+
+.footer-logo img {
+    height: 28px;
+    width: auto;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.2rem;
+}
+
+.footer-links a {
+    color: #388e3c;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: #1b5e20;
+    text-decoration: underline;
+}
+
+.footer-copyright {
+    color: #888;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 900px) {
+    .privacy-content, .footer-content, .header-container {
+        max-width: 98vw;
+        padding: 0 0.5rem;
+    }
+    .privacy-content {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .privacy-hero h1 {
+        font-size: 1.4rem;
+    }
+    .privacy-content {
+        padding: 0.5rem;
+    }
+    .footer-content {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+}
