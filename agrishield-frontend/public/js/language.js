@@ -7,6 +7,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Translations dictionary
     const translations = {
         en: {
+            'auth.login_title': 'Login to AgriShield',
+            'auth.email_label': 'Email',
+            'auth.email_placeholder': 'Enter your email',
+            'auth.password_label': 'Password',
+            'auth.password_placeholder': 'Enter your password',
+            'auth.login_button': 'Login',
+            'auth.no_account': "Don't have an account?",
+            'auth.signup_button': 'Sign Up',
+            'auth.signup_title': 'Create Account',
+            'auth.full_name_label': 'Full Name',
+            'auth.full_name_placeholder': 'Enter your full name',
+            'auth.phone_label': 'Phone Number',
+            'auth.phone_placeholder': 'Enter your phone number',
+            'auth.confirm_password_label': 'Confirm Password',
+            'auth.confirm_password_placeholder': 'Re-enter your password',
+            'auth.user_type_label': 'I am a:',
+            'auth.farmer_option': 'Farmer',
+            'auth.fisher_option': 'Fisher',
+            'auth.official_option': 'Government Official',
+            'auth.have_account': 'Already have an account?',
             'nav.home': 'Home',
             'nav.alerts': 'Alerts',
             'nav.predictions': 'Predictions',
@@ -45,9 +65,29 @@ document.addEventListener('DOMContentLoaded', function() {
             'footer.about': 'About',
             'footer.contact': 'Contact',
             'footer.privacy': 'Privacy',
-            'footer.copyright': '© 2023 AgriShield. All rights reserved.'
+            'footer.copyright': '© 2025 AgriShield. All rights reserved.'
         },
         sw: {
+            'auth.login_title': 'Ingia kwenye AgriShield',
+            'auth.email_label': 'Barua Pepe',
+            'auth.email_placeholder': 'Weka barua pepe yako',
+            'auth.password_label': 'Nenosiri',
+            'auth.password_placeholder': 'Weka nenosiri lako',
+            'auth.login_button': 'Ingia',
+            'auth.no_account': 'Huna akaunti?',
+            'auth.signup_button': 'Jisajili',
+            'auth.signup_title': 'Fungua Akaunti',
+            'auth.full_name_label': 'Jina Kamili',
+            'auth.full_name_placeholder': 'Weka jina lako kamili',
+            'auth.phone_label': 'Nambari ya Simu',
+            'auth.phone_placeholder': 'Weka nambari yako ya simu',
+            'auth.confirm_password_label': 'Thibitisha Nenosiri',
+            'auth.confirm_password_placeholder': 'Weka tena nenosiri lako',
+            'auth.user_type_label': 'Mimi ni:',
+            'auth.farmer_option': 'Mkulima',
+            'auth.fisher_option': 'Mvuvi',
+            'auth.official_option': 'Afisa wa Serikali',
+            'auth.have_account': 'Tayari una akaunti?',
             'nav.home': 'Nyumbani',
             'nav.alerts': 'Taadhari',
             'nav.predictions': 'Utabiri',
@@ -86,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
             'footer.about': 'Kuhusu',
             'footer.contact': 'Mawasiliano',
             'footer.privacy': 'Faragha',
-            'footer.copyright': '© 2023 AgriShield. Haki zote zimehifadhiwa.'
+            'footer.copyright': '© 2025 AgriShield. Haki zote zimehifadhiwa.'
         }
     };
 
