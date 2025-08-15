@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriShield | Flood Early Warning System</title>
+    <meta name="description" content="Hyper-local flood warnings combining satellite data and indigenous knowledge">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="images/favicon.ico">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/map.css">
+    <link rel="stylesheet" href="css/charts.css">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-container">
+                <a href="#" class="logo">
+                    <img src="images/logo.png" alt="AgriShield Logo">
+                    <span>AgriShield</span>
+                </a>
+                
+                <nav class="desktop-nav">
+                    <div class="nav-links">
+                        <a href="#dashboard" class="nav-link" data-i18n="nav.home">Home</a>
+                        <a href="#alerts" class="nav-link" data-i18n="nav.alerts">Alerts</a>
+                        <a href="#predictions" class="nav-link" data-i18n="nav.predictions">Predictions</a>
+                        <a href="#report" class="nav-link" data-i18n="nav.report">Report</a>
+                        <button class="language-toggle" id="languageToggle">
+                            <span class="en-text">Kiswahili</span>
+                            <span class="sw-text">English</span>
+                        </button>
+                    </div>
+                </nav>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            </div>
+        </header>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-nav" id="mobileNav">
+            <div class="mobile-nav-header">
+                <a href="#" class="logo">
+                    <img src="images/logo.png" alt="AgriShield Logo">
+                    <span>AgriShield</span>
+                </a>
+                <button class="close-mobile-menu" id="closeMobileMenu">×</button>
+            </div>
+            <a href="#dashboard" class="mobile-nav-link" data-i18n="nav.home">Home</a>
+            <a href="#alerts" class="mobile-nav-link" data-i18n="nav.alerts">Alerts</a>
+            <a href="#predictions" class="mobile-nav-link" data-i18n="nav.predictions">Predictions</a>
+            <a href="#report" class="mobile-nav-link" data-i18n="nav.report">Report</a>
+            <button class="language-toggle" id="mobileLanguageToggle">
+                <span class="en-text">Kiswahili</span>
+                <span class="sw-text">English</span>
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="dashboard-section">
+                <div class="hero">
+                    <h1 data-i18n="hero.title">Protect Your Farm with Early Flood Warnings</h1>
+                    <p data-i18n="hero.subtitle">Combining satellite data and local knowledge for Budalang'i farmers</p>
+                    <div class="cta-buttons">
+                        <a href="#predictions" class="btn btn-primary" data-i18n="hero.cta_primary">View Predictions</a>
+                        <a href="#report" class="btn btn-secondary" data-i18n="hero.cta_secondary">Report Signs</a>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <!-- Risk Indicator -->
+                    <div class="risk-indicator-card">
+                        <h2 data-i18n="risk.title">Current Flood Risk</h2>
+                        <div class="risk-level high">
+                            <div class="risk-gauge">
+                                <div class="gauge-fill" style="height: 85%;"></div>
+                                <span class="gauge-text">85%</span>
+                            </div>
+                            <div class="risk-label" data-i18n="risk.high">HIGH RISK</div>
+                        </div>
+                        <p class="risk-description" data-i18n="risk.high_description">Flood expected in 2-3 days. Take immediate action.</p>
+                    </div>
+
+                    <!-- Map Container -->
+                    <div class="map-card">
+                        <h2 data-i18n="map.title">Flood Risk Map</h2>
+                        <div id="map" class="flood-map">
+                            <div class="map-loading">Loading map...</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Alerts Section -->
+            <section id="alerts" class="alerts-section">
+                <h2 data-i18n="alerts.title">Recent Alerts</h2>
+                <div class="alert-cards">
+                    <div class="alert-card high-alert">
+                        <div class="alert-header">
+                            <span class="alert-icon">⚠️</span>
+                            <h3 data-i18n="alerts.high_title">High Flood Risk</h3>
+                            <span class="alert-time" data-i18n="alerts.time_ago">2 hours ago</span>
+                        </div>
+                        <p data-i18n="alerts.high_message">River Nzoia rising rapidly. Expected to flood in 48 hours.</p>
+                        <div class="alert-actions">
+                            <button class="btn btn-small" data-i18n="alerts.action">Recommended Actions</button>
+                        </div>
+                    </div>
+                    
+                    <div class="alert-card moderate-alert">
+                        <div class="alert-header">
+                            <span class="alert-icon">ℹ️</span>
+                            <h3 data-i18n="alerts.moderate_title">Moderate Risk</h3>
+                            <span class="alert-time" data-i18n="alerts.time_ago">1 day ago</span>
+                        </div>
+                        <p data-i18n="alerts.moderate_message">Heavy rains upstream detected. Prepare your farm.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Enhanced Visualizations Section -->
+            <section id="predictions" class="visualization-section">
+                <h2 data-i18n="visualization.title">Flood Predictions & Historical Data</h2>
+                
+                <!-- Flood Prediction Timeline -->
+                <div class="chart-container">
+                    <h3 data-i18n="visualization.timeline_title">5-Day Flood Risk Forecast</h3>
+                    <div class="timeline-chart">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <span class="legend-item scientific" data-i18n="visualization.legend_scientific">Scientific Data</span>
+                        <span class="legend-item indigenous" data-i18n="visualization.legend_indigenous">Community Reports</span>
+                    </div>
+                </div>
+                
+                <!-- Historical Flood Data -->
+                <div class="chart-container">
+                    <h3 data-i18n="visualization.historical_title">Historical Flood Events</h3>
+                    <div class="historical-chart">
+                        <canvas id="historicalChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Reporting Section -->
+            <section id="report" class="report-section">
+                <h2 data-i18n="report.title">Report Flood Indicators</h2>
+                <form id="reportForm" class="report-form">
+                    <div class="form-group">
+                        <label for="indicatorType" data-i18n="report.type_label">Indicator Type</label>
+                        <select id="indicatorType" name="indicatorType" required>
+                            <option value="" data-i18n="report.select_default">Select an indicator</option>
+                            <option value="river_color" data-i18n="report.type_river">River Color Change</option>
+                            <option value="bird_behavior" data-i18n="report.type_bird">Bird Behavior</option>
+                            <option value="water_plants" data-i18n="report.type_plants">Water Plants Movement</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="location" data-i18n="report.location_label">Location</label>
+                        <input type="text" id="location" name="location" required 
+                               placeholder="E.g. Near Bunyala market" data-i18n-placeholder="report.location_placeholder">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="description" data-i18n="report.description_label">Description</label>
+                        <textarea id="description" name="description" rows="4" required
+                                  data-i18n-placeholder="report.description_placeholder"></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" data-i18n="report.submit">Submit Report</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="AgriShield Logo">
+                    <span>AgriShield</span>
+                </div>
+                <div class="footer-links">
+                    <a href="#about" data-i18n="footer.about">About</a>
+                    <a href="#contact" data-i18n="footer.contact">Contact</a>
+                    <a href="#privacy" data-i18n="footer.privacy">Privacy</a>
+                </div>
+                <div class="footer-copyright" data-i18n="footer.copyright">
+                    © 2023 AgriShield. All rights reserved.
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="js/language.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
