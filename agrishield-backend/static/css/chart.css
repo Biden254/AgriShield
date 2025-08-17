@@ -1,0 +1,94 @@
+/* Chart Containers */
+.chart-container {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.chart-container h3 {
+    margin-bottom: 1rem;
+    color: var(--primary-dark);
+}
+
+/* Animation for charts */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.timeline-chart,
+.historical-chart {
+    animation: fadeIn 0.5s ease-out;
+    height: 300px;
+    position: relative;
+}
+
+/* Tooltip styles */
+.chart-tooltip {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 100;
+    transform: translate(-50%, -100%);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.chart-tooltip.active {
+    opacity: 1;
+}
+
+/* Chart legends */
+.chart-legend {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.legend-item::before {
+    content: '';
+    display: block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+}
+
+.legend-item.scientific::before {
+    background-color: #1976D2;
+}
+
+.legend-item.indigenous::before {
+    background-color: #FFA000;
+}
+
+/* Risk level indicators */
+.risk-indicator {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.risk-high {
+    background-color: var(--danger-color);
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.3);
+}
+
+.risk-moderate {
+    background-color: var(--warning-color);
+    box-shadow: 0 0 0 3px rgba(255, 160, 0, 0.3);
+}

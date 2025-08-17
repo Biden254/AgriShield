@@ -1,0 +1,10 @@
+Django
+djangorestframework
+django-filter
+celery[redis]
+openmeteo-requests
+pandas
+requests-cache
+retry-requests
+psycopg2-binary  # For PostgreSQL, if you use it
+gunicorn         # For production deployment

@@ -1,0 +1,9 @@
+-r base.txt
+
+# Debugging
+django-debug-toolbar>=4.2
+
+# Developer utilities
+ipython>=8.12
+black>=24.4
+flake8>=6.1
