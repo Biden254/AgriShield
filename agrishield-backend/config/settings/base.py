@@ -6,8 +6,9 @@ Shared across development and production.
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
-# Load environment variables from .env if present
+# Load environment variables from .env if present (local dev)
 load_dotenv()
 
 # ------------------------
@@ -20,7 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # ------------------------
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")  # Override in production
 DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1")
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "*").split(",")
+
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
 
 # ------------------------
 # APPLICATIONS
@@ -53,8 +55,9 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIDDLEWARE
 # ------------------------
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # Keep CORS at the top
+    "corsheaders.middleware.CorsMiddleware",  # CORS should be high up
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # for serving static files on Render
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -62,10 +65,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
-# WhiteNoise for static files in production
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ------------------------
 # URLS & WSGI
@@ -77,26 +76,20 @@ WSGI_APPLICATION = "config.wsgi.application"
 # DATABASE
 # ------------------------
 DATABASES = {
-    "default": {
-        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.mysql"),
-        "NAME": os.getenv("DB_NAME", "agrishield_db"),
-        "USER": os.getenv("DB_USER", "agrishield_user"),
-        "PASSWORD": os.getenv("DB_PASSWORD", "G0r1ll@p3"),
-        "HOST": os.getenv("DB_HOST", "localhost"),
-        "PORT": os.getenv("DB_PORT", "3306"),
-        "OPTIONS": {
-            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-    }
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True,
+    )
 }
 
 # ------------------------
 # AUTH & USER MODEL
 # ------------------------
-AUTH_USER_MODEL = "users.User"  # Custom user model
+AUTH_USER_MODEL = "users.User"
 
 # ------------------------
-# PASSWORD VALIDATORS
+# PASSWORDS
 # ------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -117,8 +110,10 @@ USE_TZ = True
 # STATIC & MEDIA
 # ------------------------
 STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"  # For collectstatic
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -147,7 +142,7 @@ TEMPLATES = [
 # ------------------------
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",  # Change to IsAuthenticated in prod
+        "rest_framework.permissions.AllowAny",  # TODO: switch to IsAuthenticated in prod
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
@@ -158,11 +153,8 @@ REST_FRAMEWORK = {
 # ------------------------
 # CORS
 # ------------------------
-CORS_ALLOWED_ORIGINS = [
-    "https://agrishield-one.vercel.app",  # Production frontend
-    "http://localhost:3000",             # Local development
-]
-CORS_ALLOW_ALL_ORIGINS = False  # Keep strict in production
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+CORS_ALLOW_ALL_ORIGINS = False
 
 # ------------------------
 # AFRICA'S TALKING SMS/USSD
