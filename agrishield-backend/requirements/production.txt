@@ -8,3 +8,5 @@ whitenoise>=6.6  # serve static files in production
 
 # Monitoring (optional)
 sentry-sdk>=1.28
+python-dotenv
+psycopg2-binary

@@ -53,7 +53,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIDDLEWARE
 # ------------------------
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # CORS should be high up
+    "corsheaders.middleware.CorsMiddleware",  # Keep CORS at the top
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -62,6 +62,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# WhiteNoise for static files in production
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ------------------------
 # URLS & WSGI
@@ -74,22 +78,25 @@ WSGI_APPLICATION = "config.wsgi.application"
 # ------------------------
 DATABASES = {
     "default": {
-        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.getenv("DB_NAME", BASE_DIR / "db.sqlite3"),
-        "USER": os.getenv("DB_USER", ""),
-        "PASSWORD": os.getenv("DB_PASSWORD", ""),
-        "HOST": os.getenv("DB_HOST", ""),
-        "PORT": os.getenv("DB_PORT", ""),
+        "ENGINE": os.getenv("DB_ENGINE", "django.db.backends.mysql"),
+        "NAME": os.getenv("DB_NAME", "agrishield_db"),
+        "USER": os.getenv("DB_USER", "agrishield_user"),
+        "PASSWORD": os.getenv("DB_PASSWORD", "G0r1ll@p3"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "3306"),
+        "OPTIONS": {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
 
 # ------------------------
 # AUTH & USER MODEL
 # ------------------------
-AUTH_USER_MODEL = "users.User"  # if you have a custom user model
+AUTH_USER_MODEL = "users.User"  # Custom user model
 
 # ------------------------
-# PASSWORDS
+# PASSWORD VALIDATORS
 # ------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -111,7 +118,7 @@ USE_TZ = True
 # ------------------------
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles" # for collectstatic staticfiles
+STATIC_ROOT = BASE_DIR / "staticfiles"  # For collectstatic
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -140,7 +147,7 @@ TEMPLATES = [
 # ------------------------
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",  # change to IsAuthenticated in prod
+        "rest_framework.permissions.AllowAny",  # Change to IsAuthenticated in prod
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
@@ -151,7 +158,11 @@ REST_FRAMEWORK = {
 # ------------------------
 # CORS
 # ------------------------
-CORS_ALLOW_ALL_ORIGINS = True  # lock this down in prod
+CORS_ALLOWED_ORIGINS = [
+    "https://agrishield-one.vercel.app",  # Production frontend
+    "http://localhost:3000",             # Local development
+]
+CORS_ALLOW_ALL_ORIGINS = False  # Keep strict in production
 
 # ------------------------
 # AFRICA'S TALKING SMS/USSD

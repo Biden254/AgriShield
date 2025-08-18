@@ -16,3 +16,4 @@ africastalking>=1.2.5
 
 # Utilities
 requests>=2.31
+mysqlclient

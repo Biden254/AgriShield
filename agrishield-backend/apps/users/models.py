@@ -17,6 +17,14 @@ LANGUAGE_CHOICES = [
     # add local dialect codes as needed
 ]
 
+ROLE_CHOICES = [
+    ("farmer", "Farmer"),
+    ("fisher", "Fisher"),
+    ("government", "Government Official"),
+]
+
+role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="farmer")
+
 class Farmer(models.Model):
     """
     Farmer profile information.
@@ -46,6 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     farmer_profile = models.ForeignKey(Farmer, on_delete=models.CASCADE, null=True, blank=True,
         related_name="users",
     )
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="farmer")
     language = models.CharField(max_length=8, choices=LANGUAGE_CHOICES, default="sw")
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -62,4 +71,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = _("users")
 
     def __str__(self):
-        return f"{self.name or self.msisdn} ({self.msisdn})"
+        if self.farmer_profile and self.farmer_profile.name:
+            return f"{self.farmer_profile.name} ({self.msisdn})"
+        return f"{self.msisdn}"
