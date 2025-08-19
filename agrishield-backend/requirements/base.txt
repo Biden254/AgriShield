@@ -21,3 +21,4 @@ celery[redis]
 openmeteo-requests
 requests-cache
 retry-requests
+psycopg[binary]

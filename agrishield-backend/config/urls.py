@@ -5,15 +5,20 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    
+
     # API routes
     path("api/users/", include("apps.users.urls")),
     path("api/data/", include("apps.data.urls")),
     path("api/integrations/", include("apps.integrations.urls")),
-    
+
     # Core app routes (frontend pages)
     path("", include("apps.core.urls")),
+
+    # Auth endpoints
+    path("api/auth/", include("dj_rest_auth.urls")),                     # login/logout/password reset
+    path("api/auth/registration/", include("dj_rest_auth.registration.urls")),  # signup
 ]
+
 
 # Serve static files during development
 if settings.DEBUG:

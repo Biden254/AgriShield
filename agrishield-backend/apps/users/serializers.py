@@ -1,9 +1,11 @@
 from rest_framework import serializers
-from .models import User
 from django.core.validators import RegexValidator
-from apps.core.models import Village   
+from dj_rest_auth.registration.serializers import RegisterSerializer
+from apps.core.models import Village
+from .models import User
 
 
+# ✅ International phone validator
 phone_validator = RegexValidator(
     regex=r"^\+?\d{9,15}$",
     message="Enter a valid international phone number, e.g. +254712345678",
@@ -19,13 +21,17 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ["msisdn", "is_active", "date_joined"]
 
 
-class RegisterSerializer(serializers.ModelSerializer):
+class CustomRegisterSerializer(RegisterSerializer):
+    """
+    Overrides dj-rest-auth's RegisterSerializer to use msisdn instead of username/email.
+    """
+
+    username = None  # remove username completely
+    email = None     # we don’t need email
     msisdn = serializers.CharField(validators=[phone_validator])
     name = serializers.CharField(required=False, allow_blank=True)
     village = serializers.PrimaryKeyRelatedField(
-        queryset=Village.objects.all(),  
-        required=False,
-        allow_null=True
+        queryset=Village.objects.all(), required=False, allow_null=True
     )
     language = serializers.ChoiceField(
         choices=User._meta.get_field("language").choices, default="sw"
@@ -35,8 +41,25 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ("msisdn", "name", "village", "language")
 
-    def create(self, validated_data):
-        msisdn = validated_data.pop("msisdn")
-        # Create user with unusable password (OTP-based login expected)
-        user = User.objects.create_user(msisdn=msisdn, **validated_data)
+    def get_cleaned_data(self):
+        """
+        dj-rest-auth expects this method to return the cleaned fields.
+        """
+        return {
+            "msisdn": self.validated_data.get("msisdn"),
+            "name": self.validated_data.get("name", ""),
+            "village": self.validated_data.get("village", None),
+            "language": self.validated_data.get("language", "sw"),
+        }
+
+    def save(self, request):
+        """
+        Override save() to create the user correctly.
+        """
+        user = User.objects.create_user(
+            msisdn=self.validated_data["msisdn"],
+            name=self.validated_data.get("name", ""),
+            village=self.validated_data.get("village", None),
+            language=self.validated_data.get("language", "sw"),
+        )
         return user

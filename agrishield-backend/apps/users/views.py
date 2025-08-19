@@ -1,14 +1,16 @@
+# users/views.py
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from .models import User, Farmer
+from .models import User
 from .serializers import UserSerializer, RegisterSerializer
 from .permissions import IsFarmerOrReadOnly
 
 
 class RegisterView(generics.CreateAPIView):
     """
-    Register a new user (farmer) by MSISDN.
-    Expected payload: { "msisdn": "+2547...", "name": "Peter", "village": <id>, "language": "sw" }
+    Register a new user by MSISDN.
+    Expected payload:
+      { "msisdn": "+2547...", "name": "Peter", "village": <id>, "language": "sw" }
     """
     serializer_class = RegisterSerializer
     permission_classes = [permissions.AllowAny]
@@ -17,17 +19,15 @@ class RegisterView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        data = UserSerializer(user).data
         return Response(
-            {"detail": "registered", "user": data},
+            {"detail": "registered", "user": UserSerializer(user).data},
             status=status.HTTP_201_CREATED
         )
 
 
 class MeView(generics.RetrieveUpdateAPIView):
     """
-    Retrieve or update current user's profile.
-    Includes farmer-specific info if applicable.
+    Retrieve or update the current user's profile.
     """
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -40,7 +40,7 @@ class FarmerProfileView(generics.RetrieveUpdateAPIView):
     """
     Retrieve or update the authenticated farmer’s profile.
     """
-    serializer_class = UserSerializer 
+    serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated, IsFarmerOrReadOnly]
 
     def get_object(self):
@@ -49,8 +49,8 @@ class FarmerProfileView(generics.RetrieveUpdateAPIView):
 
 class AdminUserListView(generics.ListAPIView):
     """
-    Admin-only: list all users for monitoring.
+    Admin-only: list all users.
     """
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
-    queryset = User.objects.all().select_related("village")
+    queryset = User.objects.select_related("village").all()
