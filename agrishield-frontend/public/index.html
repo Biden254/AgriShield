@@ -29,14 +29,15 @@
             <div class="auth-container">
                 <button class="close-auth" id="closeLogin">×</button>
                 <h2 data-i18n="auth.login_title">Login to AgriShield</h2>
-                <form id="loginForm">
+                <div class="error-message" id="loginError"></div>
+                <form id="loginForm" novalidate>
                     <div class="form-group">
                         <label for="loginEmail" data-i18n="auth.email_label">Email</label>
-                        <input type="email" id="loginEmail" required data-i18n-placeholder="auth.email_placeholder">
+                        <input type="email" id="loginEmail" name="loginEmail" required data-i18n-placeholder="auth.email_placeholder">
                     </div>
                     <div class="form-group">
                         <label for="loginPassword" data-i18n="auth.password_label">Password</label>
-                        <input type="password" id="loginPassword" required data-i18n-placeholder="auth.password_placeholder">
+                        <input type="password" id="loginPassword" name="loginPassword" required data-i18n-placeholder="auth.password_placeholder">
                     </div>
                     <button type="submit" class="btn btn-primary" data-i18n="auth.login_button">Login</button>
                 </form>
@@ -51,30 +52,31 @@
             <div class="auth-container">
                 <button class="close-auth" id="closeSignup">×</button>
                 <h2 data-i18n="auth.signup_title">Create Account</h2>
-                <form id="signupForm">
+                <div class="error-message" id="signupError"></div>
+                <form id="signupForm" novalidate>
                     <div class="form-group">
                         <label for="signupName" data-i18n="auth.full_name_label">Full Name</label>
-                        <input type="text" id="signupName" required data-i18n-placeholder="auth.full_name_placeholder">
+                        <input type="text" id="signupName" name="signupName" required data-i18n-placeholder="auth.full_name_placeholder">
                     </div>
                     <div class="form-group">
                         <label for="signupEmail" data-i18n="auth.email_label">Email</label>
-                        <input type="email" id="signupEmail" required data-i18n-placeholder="auth.email_placeholder">
+                        <input type="email" id="signupEmail" name="signupEmail" required data-i18n-placeholder="auth.email_placeholder">
                     </div>
                     <div class="form-group">
                         <label for="signupPhone" data-i18n="auth.phone_label">Phone Number</label>
-                        <input type="tel" id="signupPhone" required data-i18n-placeholder="auth.phone_placeholder">
+                        <input type="tel" id="signupPhone" name="signupPhone" required data-i18n-placeholder="auth.phone_placeholder">
                     </div>
                     <div class="form-group">
                         <label for="signupPassword" data-i18n="auth.password_label">Password</label>
-                        <input type="password" id="signupPassword" required data-i18n-placeholder="auth.password_placeholder">
+                        <input type="password" id="signupPassword" name="signupPassword" required data-i18n-placeholder="auth.password_placeholder">
                     </div>
                     <div class="form-group">
                         <label for="signupConfirm" data-i18n="auth.confirm_password_label">Confirm Password</label>
-                        <input type="password" id="signupConfirm" required data-i18n-placeholder="auth.confirm_password_placeholder">
+                        <input type="password" id="signupConfirm" name="signupConfirm" required data-i18n-placeholder="auth.confirm_password_placeholder">
                     </div>
                     <div class="form-group">
                         <label for="userType" data-i18n="auth.user_type_label">I am a:</label>
-                        <select id="userType" required>
+                        <select id="userType" name="userType" required>
                             <option value="farmer" data-i18n="auth.farmer_option">Farmer</option>
                             <option value="fisher" data-i18n="auth.fisher_option">Fisher</option>
                             <option value="official" data-i18n="auth.official_option">Government Official</option>
@@ -116,8 +118,8 @@
 
         <!-- WELCOME BANNER (NEW) -->
         <div id="welcomeBanner" style="display: none; text-align: center; background-color: #e8f5e9; padding: 10px; font-size: 1.1rem;">
-            Welcome back, <span id="loggedInUser"></span> 👋
-            <button id="logoutBtn" class="btn btn-small" style="margin-left: 15px;">Logout</button>
+            Welcome back, <span id="loggedInUser"></span>!
+            <button id="logoutBtn" class="btn btn-small" style="margin-left: 15px; display: none;">Logout</button>
         </div>
 
         <!-- Mobile Menu -->

@@ -1,126 +1,207 @@
-const API_BASE_URL = "https://agrishield-5j83.onrender.com";
+document.addEventListener('DOMContentLoaded', () => {
+    const API_BASE_URL = "https://agrishield-5j83.onrender.com";
 
-// Elements
-const loginForm = document.getElementById("login-form");
-const signupForm = document.getElementById("signup-form");
-const loginError = document.getElementById("login-error");
-const signupError = document.getElementById("signup-error");
-const logoutBtn = document.getElementById("logout-btn");
-const usernameSpan = document.getElementById("username");
-const dashboardSection = document.getElementById("dashboard");
+    // Auth Modals Elements
+    const loginModal = document.getElementById('loginModal');
+    const signupModal = document.getElementById('signupModal');
+    const authButton = document.getElementById('authButton');
+    const mobileAuthButton = document.getElementById('mobileAuthButton');
+    const closeLoginBtn = document.getElementById('closeLogin');
+    const closeSignupBtn = document.getElementById('closeSignup');
+    const showSignupBtn = document.getElementById('showSignup');
+    const showLoginBtn = document.getElementById('showLogin');
 
-// ---------------- LOGIN ----------------
-if (loginForm) {
-    loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        loginError.textContent = "";
+    // Forms and User display elements
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const loginError = document.getElementById("loginError");
+    const signupError = document.getElementById("signupError");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const welcomeBanner = document.getElementById("welcomeBanner");
+    const loggedInUserSpan = document.getElementById("loggedInUser");
+    const userDashboard = document.getElementById("userDashboard");
 
-        const email = loginForm.email.value;
-        const password = loginForm.password.value;
-
-        try {
-            const res = await fetch(`${API_BASE_URL}/auth/login/`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
-            });
-
-            if (!res.ok) {
-                const data = await res.json();
-                loginError.textContent = data.non_field_errors || "Invalid credentials.";
-                return;
-            }
-
-            const data = await res.json();
-            localStorage.setItem("authToken", data.key);
-            fetchUserProfile();
-        } catch (err) {
-            loginError.textContent = "Something went wrong. Try again.";
-        }
-    });
-}
-
-// ---------------- SIGNUP ----------------
-if (signupForm) {
-    signupForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        signupError.textContent = "";
-
-        const username = signupForm.username.value;
-        const email = signupForm.email.value;
-        const password1 = signupForm.password1.value;
-        const password2 = signupForm.password2.value;
-
-        try {
-            const res = await fetch(`${API_BASE_URL}/auth/registration/`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username, email, password1, password2 }),
-            });
-
-            if (!res.ok) {
-                const data = await res.json();
-                signupError.textContent = data.detail || "Signup failed.";
-                return;
-            }
-
-            const data = await res.json();
-            localStorage.setItem("authToken", data.key);
-            fetchUserProfile();
-        } catch (err) {
-            signupError.textContent = "Something went wrong. Try again.";
-        }
-    });
-}
-
-// ---------------- FETCH USER PROFILE ----------------
-async function fetchUserProfile() {
-    const token = localStorage.getItem("authToken");
-    if (!token) return;
-
-    try {
-        const res = await fetch(`${API_BASE_URL}/auth/user/`, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Token ${token}`,
-            },
-        });
-
-        if (res.ok) {
-            const data = await res.json();
-            usernameSpan.textContent = data.username;
-            dashboardSection.style.display = "block";
-            logoutBtn.style.display = "inline";
-        }
-    } catch (err) {
-        console.error("Failed to fetch user profile:", err);
+    // ---------------- MODAL VISIBILITY ----------------
+    function openLoginModal() {
+        if (signupModal) signupModal.style.display = 'none';
+        if (loginModal) loginModal.style.display = 'flex';
     }
-}
 
-// ---------------- LOGOUT ----------------
-if (logoutBtn) {
-    logoutBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
+    function openSignupModal() {
+        if (loginModal) loginModal.style.display = 'none';
+        if (signupModal) signupModal.style.display = 'flex';
+    }
 
+    function closeModal() {
+        if (loginModal) loginModal.style.display = 'none';
+        if (signupModal) signupModal.style.display = 'none';
+    }
+
+    if (authButton) authButton.addEventListener('click', openLoginModal);
+    if (mobileAuthButton) mobileAuthButton.addEventListener('click', openLoginModal);
+    if (closeLoginBtn) closeLoginBtn.addEventListener('click', closeModal);
+    if (closeSignupBtn) closeSignupBtn.addEventListener('click', closeModal);
+    if (showSignupBtn) showSignupBtn.addEventListener('click', openSignupModal);
+    if (showLoginBtn) showLoginBtn.addEventListener('click', openLoginModal);
+
+    window.addEventListener('click', (e) => {
+        if (e.target === loginModal || e.target === signupModal) {
+            closeModal();
+        }
+    });
+
+    // ---------------- LOGIN ----------------
+    if (loginForm) {
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (loginError) loginError.textContent = "";
+
+            const email = loginForm.loginEmail.value;
+            const password = loginForm.loginPassword.value;
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/auth/login/`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    loginError.textContent = data.non_field_errors?.[0] || data.detail || "Invalid credentials.";
+                    return;
+                }
+
+                localStorage.setItem("authToken", data.key);
+                await fetchUserProfile();
+                closeModal();
+            } catch (err) {
+                if (loginError) loginError.textContent = "Something went wrong. Try again.";
+                console.error("Login error:", err);
+            }
+        });
+    }
+
+    // ---------------- SIGNUP ----------------
+    if (signupForm) {
+        signupForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            if (signupError) signupError.textContent = "";
+
+            const username = signupForm.signupName.value;
+            const email = signupForm.signupEmail.value;
+            const password = signupForm.signupPassword.value;
+            const password2 = signupForm.signupConfirm.value;
+            // The backend expects 'password1' and 'password2' for registration.
+            const password1 = password;
+
+            if (password !== password2) {
+                if (signupError) signupError.textContent = "Passwords do not match.";
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE_URL}/auth/registration/`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username, email, password1, password2 }),
+                });
+
+                const data = await res.json();
+                if (!res.ok) {
+                    // Handle various error formats from backend
+                    let errorMsg = "Signup failed.";
+                    if (data.username) errorMsg = `Username: ${data.username[0]}`;
+                    else if (data.email) errorMsg = `Email: ${data.email[0]}`;
+                    else if (data.password) errorMsg = `Password: ${data.password[0]}`;
+                    else if (data.detail) errorMsg = data.detail;
+                    if (signupError) signupError.textContent = errorMsg;
+                    return;
+                }
+
+                localStorage.setItem("authToken", data.key);
+                await fetchUserProfile();
+                closeModal();
+            } catch (err) {
+                if (signupError) signupError.textContent = "Something went wrong. Try again.";
+                console.error("Signup error:", err);
+            }
+        });
+    }
+
+    // ---------------- FETCH USER PROFILE ----------------
+    async function fetchUserProfile() {
         const token = localStorage.getItem("authToken");
-        if (!token) return;
+        if (!token) {
+            updateUIForLoggedOutUser();
+            return;
+        }
 
         try {
-            await fetch(`${API_BASE_URL}/auth/logout/`, {
-                method: "POST",
+            const res = await fetch(`${API_BASE_URL}/auth/user/`, {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Token ${token}`,
                 },
             });
-        } catch (err) {
-            console.error("Logout failed:", err);
-        } finally {
-            localStorage.removeItem("authToken");
-            window.location.reload();
-        }
-    });
-}
 
-// Auto-fetch user profile on page load
-fetchUserProfile();
+            if (res.ok) {
+                const user = await res.json();
+                updateUIForLoggedInUser(user);
+            } else {
+                // Token might be invalid/expired
+                localStorage.removeItem("authToken");
+                updateUIForLoggedOutUser();
+            }
+        } catch (err) {
+            console.error("Failed to fetch user profile:", err);
+            updateUIForLoggedOutUser();
+        }
+    }
+
+    function updateUIForLoggedInUser(user) {
+        if (loggedInUserSpan) loggedInUserSpan.textContent = user.username;
+        if (welcomeBanner) welcomeBanner.style.display = "block";
+        if (userDashboard) userDashboard.style.display = "block";
+        if (authButton) authButton.style.display = 'none';
+        if (mobileAuthButton) mobileAuthButton.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'inline-block';
+    }
+
+    function updateUIForLoggedOutUser() {
+        if (welcomeBanner) welcomeBanner.style.display = "none";
+        if (userDashboard) userDashboard.style.display = "none";
+        if (authButton) authButton.style.display = 'inline-block';
+        if (mobileAuthButton) mobileAuthButton.style.display = 'inline-block';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+    }
+
+    // ---------------- LOGOUT ----------------
+    if (logoutBtn) {
+        logoutBtn.addEventListener("click", async (e) => {
+            e.preventDefault();
+
+            const token = localStorage.getItem("authToken");
+            if (!token) return;
+
+            try {
+                await fetch(`${API_BASE_URL}/auth/logout/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Token ${token}`,
+                    },
+                });
+            } catch (err) {
+                console.error("Logout failed:", err);
+            } finally {
+                localStorage.removeItem("authToken");
+                updateUIForLoggedOutUser();
+                window.location.reload(); // Or redirect to home
+            }
+        });
+    }
+
+    // Auto-fetch user profile on page load
+    fetchUserProfile();
+});
