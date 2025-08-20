@@ -1,6 +1,28 @@
+// Function to get CSRF token from cookies
+function getCSRFToken() {
+    let cookieValue = null;
+    const name = 'csrftoken';
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const API_BASE_URL = "https://agrishield-5j83.onrender.com";
     console.log("Auth script loaded");
+    
+    // Get CSRF token once when the page loads
+    const csrftoken = getCSRFToken();
+    console.log('CSRF Token:', csrftoken); // Debug log
+    
     // Auth Modals Elements
     const loginModal = document.getElementById('loginModal');
     const signupModal = document.getElementById('signupModal');
@@ -62,7 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const res = await fetch(`${API_BASE_URL}/auth/login/`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrftoken  // Add CSRF token
+                    },
                     body: JSON.stringify({ email, password }),
                 });
 
@@ -105,7 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const res = await fetch(`${API_BASE_URL}/auth/registration/`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "X-CSRFToken": csrftoken  // Add CSRF token
+                    },
                     body: JSON.stringify({ username, email, phone_number, user_type, password1, password2 }),
                 });
 
@@ -192,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Token ${token}`,
+                        "X-CSRFToken": csrftoken  // Add CSRF token for logout too
                     },
                 });
             } catch (err) {
