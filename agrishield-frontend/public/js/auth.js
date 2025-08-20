@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_BASE_URL = "https://agrishield-5j83.onrender.com";
-
+    console.log("Auth script loaded");
     // Auth Modals Elements
     const loginModal = document.getElementById('loginModal');
     const signupModal = document.getElementById('signupModal');
