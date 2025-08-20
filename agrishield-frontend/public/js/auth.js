@@ -23,18 +23,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ---------------- MODAL VISIBILITY ----------------
     function openLoginModal() {
-        if (signupModal) signupModal.style.display = 'none';
-        if (loginModal) loginModal.style.display = 'flex';
+        if (signupModal) signupModal.classList.remove('active');
+        if (loginModal) loginModal.classList.add('active');
     }
 
     function openSignupModal() {
-        if (loginModal) loginModal.style.display = 'none';
-        if (signupModal) signupModal.style.display = 'flex';
+        if (loginModal) loginModal.classList.remove('active');
+        if (signupModal) signupModal.classList.add('active');
     }
 
     function closeModal() {
-        if (loginModal) loginModal.style.display = 'none';
-        if (signupModal) signupModal.style.display = 'none';
+        if (loginModal) loginModal.classList.remove('active');
+        if (signupModal) signupModal.classList.remove('active');
     }
 
     if (authButton) authButton.addEventListener('click', openLoginModal);
@@ -90,6 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const username = signupForm.signupName.value;
             const email = signupForm.signupEmail.value;
+            const phone_number = signupForm.signupPhone.value;
+            const user_type = signupForm.userType.value;
             const password = signupForm.signupPassword.value;
             const password2 = signupForm.signupConfirm.value;
             // The backend expects 'password1' and 'password2' for registration.
@@ -104,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const res = await fetch(`${API_BASE_URL}/auth/registration/`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ username, email, password1, password2 }),
+                    body: JSON.stringify({ username, email, phone_number, user_type, password1, password2 }),
                 });
 
                 const data = await res.json();

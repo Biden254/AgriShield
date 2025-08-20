@@ -12,7 +12,7 @@
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/map.css">
-    <link rel="stylesheet" href="css/charts.css">
+    <link rel="stylesheet" href="css/chart.css">
     <link rel="stylesheet" href="css/auth.css">
 
     <!-- Leaflet CSS -->
@@ -173,6 +173,50 @@
                         </div>
                     </div>
                 </div>
+            </section>
+
+            <!-- Predictions Section -->
+            <section id="predictions" class="content-section">
+                <h2 data-i18n="visualization.title">Flood Predictions & Historical Data</h2>
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <h3 data-i18n="visualization.timeline_title">5-Day Flood Risk Forecast</h3>
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <h3 data-i18n="visualization.historical_title">Historical Flood Events</h3>
+                        <canvas id="historicalChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Map Section -->
+            <section class="content-section">
+                <h2 data-i18n="map.title">Flood Risk Map</h2>
+                <div class="map-container">
+                    <div id="map" style="height: 500px; width: 100%;"></div>
+                    <div class="map-loading">
+                        <div class="spinner"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Report Section -->
+            <section id="report" class="content-section">
+                <h2 data-i18n="report.title">Report Flood Indicators</h2>
+                <form id="reportForm" class="report-form">
+                    <div class="form-group">
+                        <label for="indicatorType" data-i18n="report.type_label">Indicator Type</label>
+                        <select id="indicatorType" name="indicatorType" required>
+                            <option value="" data-i18n="report.select_default">Select an indicator</option>
+                            <option value="river_color" data-i18n="report.type_river">River Color Change</option>
+                            <option value="bird_behavior" data-i18n="report.type_bird">Bird Behavior</option>
+                            <option value="plant_movement" data-i18n="report.type_plants">Water Plants Movement</option>
+                        </select>
+                    </div>
+                    <!-- Add other form fields for location and description as needed -->
+                    <button type="submit" class="btn btn-primary" data-i18n="report.submit">Submit Report</button>
+                </form>
             </section>
         </main>
 
