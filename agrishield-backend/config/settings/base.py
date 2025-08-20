@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
+from corsheaders.defaults import default_headers
 
 # Load environment variables from .env if present (local dev)
 load_dotenv()
@@ -187,6 +188,19 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 # ------------------------
 CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
 CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "https://agrishield-one.vercel.app",
+    "https://agrishield-5j83.onrender.com", 
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+# Required for CSRF cookie to work cross-domain
+CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SECURE = True
 
 # ------------------------
 # AFRICA'S TALKING SMS/USSD
