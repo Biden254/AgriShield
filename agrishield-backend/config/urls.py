@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -17,6 +18,7 @@ urlpatterns = [
     # Auth endpoints
     path("api/auth/", include("dj_rest_auth.urls")),                     # login/logout/password reset
     path("api/auth/registration/", include("dj_rest_auth.registration.urls")),  # signup
+    path("api/auth/csrf-token/", views.get_csrf_token, name='get_csrf_token'),
 ]
 
 

@@ -15,14 +15,37 @@ function getCSRFToken() {
     return cookieValue;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// Function to fetch CSRF token using dj-rest-auth's endpoint
+async function fetchCSRFToken() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/csrf/`, {
+            method: 'GET',
+            credentials: 'include'  // Important for cookies
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data.csrfToken;
+        }
+    } catch (error) {
+        console.error('Failed to fetch CSRF token:', error);
+    }
+    return null;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
     const API_BASE_URL = "https://agrishield-5j83.onrender.com";
     console.log("Auth script loaded");
     
-    // Get CSRF token once when the page loads
-    const csrftoken = getCSRFToken();
-    console.log('CSRF Token:', csrftoken); // Debug log
+    // Try to get CSRF token from cookies first, then fetch from server if not found
+    let csrftoken = getCSRFToken();
+    console.log('Initial CSRF Token:', csrftoken);
     
+    if (!csrftoken) {
+        csrftoken = await fetchCSRFToken();
+        console.log('Fetched CSRF Token:', csrftoken);
+    }
+
     // Auth Modals Elements
     const loginModal = document.getElementById('loginModal');
     const signupModal = document.getElementById('signupModal');
@@ -82,11 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = loginForm.loginPassword.value;
 
             try {
-                const res = await fetch(`${API_BASE_URL}/auth/login/`, {
+                const res = await fetch(`${API_BASE_URL}/api/auth/login/`, {  // Changed URL
                     method: "POST",
                     headers: { 
                         "Content-Type": "application/json",
-                        "X-CSRFToken": csrftoken  // Add CSRF token
+                        "X-CSRFToken": csrftoken
                     },
                     body: JSON.stringify({ email, password }),
                 });
@@ -119,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const user_type = signupForm.userType.value;
             const password = signupForm.signupPassword.value;
             const password2 = signupForm.signupConfirm.value;
-            // The backend expects 'password1' and 'password2' for registration.
             const password1 = password;
 
             if (password !== password2) {
@@ -128,18 +150,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const res = await fetch(`${API_BASE_URL}/auth/registration/`, {
+                const res = await fetch(`${API_BASE_URL}/api/auth/registration/`, {  // Changed URL
                     method: "POST",
                     headers: { 
                         "Content-Type": "application/json",
-                        "X-CSRFToken": csrftoken  // Add CSRF token
+                        "X-CSRFToken": csrftoken
                     },
                     body: JSON.stringify({ username, email, phone_number, user_type, password1, password2 }),
                 });
 
                 const data = await res.json();
                 if (!res.ok) {
-                    // Handle various error formats from backend
                     let errorMsg = "Signup failed.";
                     if (data.username) errorMsg = `Username: ${data.username[0]}`;
                     else if (data.email) errorMsg = `Email: ${data.email[0]}`;
@@ -168,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const res = await fetch(`${API_BASE_URL}/auth/user/`, {
+            const res = await fetch(`${API_BASE_URL}/api/auth/user/`, {  // Changed URL
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Token ${token}`,
@@ -179,7 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const user = await res.json();
                 updateUIForLoggedInUser(user);
             } else {
-                // Token might be invalid/expired
                 localStorage.removeItem("authToken");
                 updateUIForLoggedOutUser();
             }
@@ -215,12 +235,12 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!token) return;
 
             try {
-                await fetch(`${API_BASE_URL}/auth/logout/`, {
+                await fetch(`${API_BASE_URL}/api/auth/logout/`, {  // Changed URL
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Token ${token}`,
-                        "X-CSRFToken": csrftoken  // Add CSRF token for logout too
+                        "X-CSRFToken": csrftoken
                     },
                 });
             } catch (err) {
@@ -228,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } finally {
                 localStorage.removeItem("authToken");
                 updateUIForLoggedOutUser();
-                window.location.reload(); // Or redirect to home
+                window.location.reload();
             }
         });
     }
