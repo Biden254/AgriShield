@@ -1,17 +1,12 @@
 from rest_framework import serializers
 from .models import Alert, AlertDelivery
-from apps.core.models import Village, Farmer
+from apps.core.models import Village
+from apps.users.models import Farmer
 from apps.core.serializers import VillageSerializer
 from django.conf import settings
 
-class VillageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Village
-        fields = ["id", "name", "location"]
-
 
 class FarmerSerializer(serializers.ModelSerializer):
-   from apps.users.models import Farmer
    class Meta:
         model = Farmer
         fields = ["id", "name", "phone_number", "preferred_language"]
