@@ -19,6 +19,11 @@ urlpatterns = [
     path("api/auth/", include("dj_rest_auth.urls")),                     # login/logout/password reset
     path("api/auth/registration/", include("dj_rest_auth.registration.urls")),  # signup
     path("api/auth/csrf-token/", views.get_csrf_token, name='get_csrf_token'),
+    path("api/v1/auth/", include("dj_rest_auth.urls")),
+    path("api/v1/auth/registration/", include("dj_rest_auth.registration.urls")),
+    path("api/v1/users/", include("apps.users.urls")),
+    path("api/v1/alerts/", include("apps.alerts.urls")),
+    path("api/v1/integrations/", include("apps.integrations.urls")),
 ]
 
 
