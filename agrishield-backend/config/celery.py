@@ -5,7 +5,7 @@ from celery import Celery
 # Default to production if no environment is set
 os.environ.setdefault(
     "DJANGO_SETTINGS_MODULE",
-    os.getenv("DJANGO_SETTINGS_MODULE", "config.settings.production")
+    os.getenv("DJANGO_SETTINGS_MODULE", "config.settings.base")
 )
 
 app = Celery("agrishield")
