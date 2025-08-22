@@ -187,16 +187,11 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 # ------------------------
 # CORS
 # ------------------------
-CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
-CORS_ALLOW_ALL_ORIGINS = False
+#CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "https://agrishield-one.vercel.app",
-    "https://agrishield-5j83.onrender.com", 
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+CORS_ALLOWED_ORIGINS = ['*']
 # Required for CSRF cookie to work cross-domain
 CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
