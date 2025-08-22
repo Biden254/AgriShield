@@ -25,7 +25,9 @@ SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")  # Override in product
 #DEBUG = False  # Set to False in production
 DEBUG = bool(int(os.getenv('DEBUG', default=1)))  # Use environment variable for DEBUG
 #ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
-ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['*']
+
+ALLOWED_HOSTS = ['agrishield-5j83.onrender.com', '100.20.92.101', '44.225.181.72', '44.227.217.144', '*']
 # ------------------------
 # APPLICATIONS
 # ------------------------
