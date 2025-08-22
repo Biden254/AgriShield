@@ -21,8 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # SECURITY
 # ------------------------
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")  # Override in production
-DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1")
-
+#DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1")
+#DEBUG = False  # Set to False in production
+DEBUG = bool(int(os.getenv('DEBUG', default=1)))  # Use environment variable for DEBUG
 #ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
 ALLOWED_HOSTS = ['*']
 # ------------------------
