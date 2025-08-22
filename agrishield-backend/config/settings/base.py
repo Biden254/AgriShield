@@ -23,8 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")  # Override in production
 DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1")
 
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
-
+#ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
+ALLOWED_HOSTS = [
+    "agrishield-5j83.onrender.com",
+    "agrishield-one.vercel.app",
+    "localhost",
+    "127.0.0.1",
+    ]
 # ------------------------
 # APPLICATIONS
 # ------------------------
