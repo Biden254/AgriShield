@@ -24,7 +24,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key")  # Override in product
 DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1")
 
 #ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost").split(",")
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['*']
 # ------------------------
 # APPLICATIONS
 # ------------------------
