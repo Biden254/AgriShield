@@ -26,8 +26,8 @@ class CustomRegisterSerializer(RegisterSerializer):
     Overrides dj-rest-auth's RegisterSerializer to use msisdn instead of username/email.
     """
 
-    username = None  # remove username completely
-    email = None     # we don’t need email
+    username = serializers.CharField(required=True, allow_blank=False, max_length=150)
+    email = serializers.EmailField(required=True, allow_blank=True, allow_null=True)
     msisdn = serializers.CharField(validators=[phone_validator])
     name = serializers.CharField(required=False, allow_blank=True)
     village = serializers.PrimaryKeyRelatedField(
@@ -39,13 +39,15 @@ class CustomRegisterSerializer(RegisterSerializer):
 
     class Meta:
         model = User
-        fields = ("msisdn", "name", "village", "language")
+        fields = ("username", "email", "msisdn", "name", "village", "language")
 
     def get_cleaned_data(self):
         """
         dj-rest-auth expects this method to return the cleaned fields.
         """
         return {
+            "username": self.validated_data.get("username", ""),
+            "email": self.validated_data.get("email", ""),
             "msisdn": self.validated_data.get("msisdn"),
             "name": self.validated_data.get("name", ""),
             "village": self.validated_data.get("village", None),
@@ -62,4 +64,5 @@ class CustomRegisterSerializer(RegisterSerializer):
             village=self.validated_data.get("village", None),
             language=self.validated_data.get("language", "sw"),
         )
+        
         return user
